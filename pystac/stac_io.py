@@ -1,6 +1,6 @@
 import os
-import json
 
+import orjson
 from urllib.parse import urlparse
 from urllib.request import urlopen
 from urllib.error import HTTPError
@@ -105,7 +105,7 @@ class STAC_IO:
             STAC_IO in order to enable additional URI types, replace that member
             with your own implementation.
         """
-        return json.loads(STAC_IO.read_text(uri))
+        return orjson.loads(STAC_IO.read_text(uri))
 
     @classmethod
     def read_stac_object(cls, uri, root=None):
@@ -144,4 +144,5 @@ class STAC_IO:
             STAC_IO in order to enable additional URI types, replace that member
             with your own implementation.
         """
-        STAC_IO.write_text(uri, json.dumps(json_dict, indent=4))
+        output_json = str(orjson.dumps(json_dict, option=orjson.OPT_INDENT_2), 'utf-8')
+        STAC_IO.write_text(uri, output_json)
